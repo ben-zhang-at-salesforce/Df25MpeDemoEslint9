@@ -1,0 +1,61 @@
+<template>
+  <lightning-card title="Contacts" icon-name="standard:contact">
+    <div class="slds-m-around_medium">
+      <!-- Loading Spinner -->
+      <template if:true={isLoading}>
+        <div class="slds-text-align_center slds-p-around_medium">
+          <lightning-spinner
+            alternative-text="Loading contacts..."
+            size="medium"
+          ></lightning-spinner>
+        </div>
+      </template>
+
+      <!-- Error Message -->
+      <template if:true={hasError}>
+        <div
+          class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_error"
+          role="alert"
+        >
+          <span class="slds-assistive-text">Error</span>
+          <h2>Error loading contacts: {errorMessage}</h2>
+        </div>
+      </template>
+
+      <!-- Data Table -->
+      <template if:true={hasContacts}>
+        <lightning-datatable
+          key-field="Id"
+          data={contacts}
+          columns={columns}
+          sorted-by={sortBy}
+          sorted-direction={sortDirection}
+          onsort={handleSort}
+          hide-checkbox-column="true"
+          show-row-number-column="true"
+          resize-column-disabled="false"
+        >
+        </lightning-datatable>
+      </template>
+
+      <!-- No Data Message -->
+      <template if:false={hasContacts}>
+        <template if:false={isLoading}>
+          <template if:false={hasError}>
+            <div class="slds-text-align_center slds-p-around_large">
+              <lightning-icon
+                icon-name="utility:info"
+                size="large"
+                class="slds-m-bottom_small"
+              ></lightning-icon>
+              <h2 class="slds-text-heading_medium">No contacts found</h2>
+              <p class="slds-text-color_weak">
+                There are no contacts to display at this time.
+              </p>
+            </div>
+          </template>
+        </template>
+      </template>
+    </div>
+  </lightning-card>
+</template>

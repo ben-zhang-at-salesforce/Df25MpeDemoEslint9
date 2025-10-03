@@ -1,0 +1,62 @@
+<template>
+  <lightning-card title="Last Viewed Contacts" icon-name="standard:contact">
+    <div class="slds-p-horizontal_medium">
+      <!-- Error state -->
+      <template lwc:if={hasError}>
+        <div
+          class="slds-notify slds-notify_alert slds-alert_error"
+          role="alert"
+        >
+          <span class="slds-assistive-text">Error</span>
+          <h2>Error loading contacts: {error.message}</h2>
+        </div>
+      </template>
+
+      <!-- Success state with contacts list -->
+      <template lwc:if={hasContacts}>
+        <div class="slds-m-bottom_small">
+          <p class="slds-text-body_small slds-text-color_weak">
+            Showing {contacts.length} last viewed contacts
+          </p>
+        </div>
+
+        <ul class="slds-list_dotted">
+          <template for:each={contacts} for:item="contact">
+            <li key={contact.Id} class="slds-item slds-p-vertical_xx-small">
+              <div class="slds-media slds-media_center">
+                <div class="slds-media__figure">
+                  <lightning-icon
+                    icon-name="standard:contact"
+                    size="small"
+                  ></lightning-icon>
+                </div>
+                <div class="slds-media__body">
+                  <div class="slds-text-heading_small">{contact.Name}</div>
+                  <template lwc:if={contact.LastViewedDate}>
+                    <div class="slds-text-body_small slds-text-color_weak">
+                      Last viewed: {contact.LastViewedDate}
+                    </div>
+                  </template>
+                </div>
+              </div>
+            </li>
+          </template>
+        </ul>
+      </template>
+
+      <!-- Empty state -->
+      <template lwc:if="{!hasContacts" && !hasError}>
+        <div class="slds-text-align_center slds-m-vertical_large">
+          <lightning-icon
+            icon-name="utility:info"
+            size="small"
+            class="slds-m-bottom_small"
+          ></lightning-icon>
+          <p class="slds-text-body_regular">
+            No recently viewed contacts found.
+          </p>
+        </div>
+      </template>
+    </div>
+  </lightning-card>
+</template>

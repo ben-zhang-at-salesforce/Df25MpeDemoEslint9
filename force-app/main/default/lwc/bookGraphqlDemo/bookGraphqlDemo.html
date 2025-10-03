@@ -1,0 +1,95 @@
+<template>
+  <lightning-card title="Book Collection" icon-name="standard:knowledge">
+    <div class="slds-p-horizontal_medium">
+      <!-- Error state -->
+      <template lwc:if={hasError}>
+        <div
+          class="slds-notify slds-notify_alert slds-alert_error"
+          role="alert"
+        >
+          <span class="slds-assistive-text">Error</span>
+          <h2>Error loading books: {errorMessage}</h2>
+        </div>
+      </template>
+
+      <!-- Success state with books list -->
+      <template lwc:if={hasBooks}>
+        <div class="slds-m-bottom_small">
+          <p class="slds-text-body_small slds-text-color_weak">
+            Showing {books.length} books from the collection
+          </p>
+        </div>
+
+        <div class="slds-grid slds-wrap slds-gutters">
+          <template for:each={books} for:item="book">
+            <div
+              key={book.Id}
+              class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3"
+            >
+              <div class="slds-box slds-m-bottom_small">
+                <div class="slds-media">
+                  <div class="slds-media__figure">
+                    <lightning-icon
+                      icon-name="standard:knowledge"
+                      size="medium"
+                    ></lightning-icon>
+                  </div>
+                  <div class="slds-media__body">
+                    <div class="slds-text-heading_small slds-m-bottom_x-small">
+                      {book.Name}
+                    </div>
+
+                    <template lwc:if={book.Author}>
+                      <div class="slds-text-body_small slds-m-bottom_xx-small">
+                        <strong>Author:</strong> {book.Author}
+                      </div>
+                    </template>
+
+                    <template lwc:if={book.Genre}>
+                      <div class="slds-text-body_small slds-m-bottom_xx-small">
+                        <strong>Genre:</strong> {book.Genre}
+                      </div>
+                    </template>
+
+                    <template lwc:if={book.PublicationDate}>
+                      <div class="slds-text-body_small slds-m-bottom_xx-small">
+                        <strong>Published:</strong> {book.PublicationDate}
+                      </div>
+                    </template>
+
+                    <template lwc:if={book.Price}>
+                      <div class="slds-text-body_small slds-m-bottom_xx-small">
+                        <strong>Price:</strong> ${book.Price}
+                      </div>
+                    </template>
+
+                    <div class="slds-text-body_small slds-text-color_weak">
+                      <strong>ID:</strong> {book.Id}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </template>
+        </div>
+      </template>
+
+      <!-- Empty state -->
+      <template lwc:if="{!hasBooks" && !hasError}>
+        <div class="slds-text-align_center slds-m-vertical_large">
+          <lightning-icon
+            icon-name="utility:info"
+            size="small"
+            class="slds-m-bottom_small"
+          ></lightning-icon>
+          <p class="slds-text-body_regular">
+            No books found in the collection.
+          </p>
+          <p class="slds-text-body_small slds-text-color_weak">
+            Make sure you have Book__c records in your org.
+          </p>
+        </div>
+      </template>
+    </div>
+  </lightning-card>
+</template>

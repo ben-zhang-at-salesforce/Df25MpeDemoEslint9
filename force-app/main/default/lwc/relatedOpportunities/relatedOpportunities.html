@@ -1,0 +1,101 @@
+<template>
+  <lightning-card
+    title="Related Opportunities"
+    icon-name="standard:opportunity"
+  >
+    <div slot="actions">
+      <template lwc:if={hasOpportunities}>
+        <lightning-badge
+          label={opportunityCount}
+          variant="success"
+        ></lightning-badge>
+      </template>
+    </div>
+
+    <div class="slds-card__body slds-card__body_inner">
+      <!-- Loading State -->
+      <template lwc:if={isLoading}>
+        <div class="slds-is-relative slds-p-around_medium">
+          <lightning-spinner
+            alternative-text="Loading opportunities..."
+            size="medium"
+          ></lightning-spinner>
+        </div>
+      </template>
+
+      <!-- Error State -->
+      <template lwc:elseif={hasError}>
+        <div
+          class="slds-notify slds-notify_alert slds-alert_error"
+          role="alert"
+        >
+          <span class="slds-assistive-text">Error</span>
+          <lightning-icon
+            icon-name="utility:error"
+            size="x-small"
+            class="slds-m-right_x-small"
+          ></lightning-icon>
+          <h2>Error loading opportunities: {errorMessage}</h2>
+        </div>
+      </template>
+
+      <!-- No Data State -->
+      <template lwc:elseif={hasOpportunities}>
+        <!-- Summary Information -->
+        <div class="slds-grid slds-gutters slds-m-bottom_medium">
+          <div class="slds-col slds-size_1-of-2">
+            <div class="slds-text-heading_small">
+              Total Opportunities:
+              <lightning-formatted-number
+                value={opportunityCount}
+              ></lightning-formatted-number>
+            </div>
+          </div>
+          <div class="slds-col slds-size_1-of-2">
+            <div class="slds-text-heading_small">
+              Total Amount:
+              <lightning-formatted-number
+                value={totalAmount}
+                format-style="currency"
+                currency-code="USD"
+              >
+              </lightning-formatted-number>
+            </div>
+          </div>
+        </div>
+
+        <!-- Data Table -->
+        <lightning-datatable
+          key-field="Id"
+          data={opportunities}
+          columns={columns}
+          sorted-by={sortBy}
+          sorted-direction={sortDirection}
+          onsort={handleSort}
+          hide-checkbox-column
+          show-row-number-column
+        >
+        </lightning-datatable>
+      </template>
+
+      <!-- Empty State -->
+      <template lwc:else>
+        <div class="slds-illustration slds-illustration_small">
+          <div
+            class="slds-text-color_weak slds-text-align_center slds-p-around_medium"
+          >
+            <lightning-icon
+              icon-name="standard:opportunity"
+              size="large"
+              class="slds-m-bottom_small"
+            ></lightning-icon>
+            <h3 class="slds-text-heading_medium">No Related Opportunities</h3>
+            <p class="slds-text-body_regular">
+              There are no opportunities related to this record.
+            </p>
+          </div>
+        </div>
+      </template>
+    </div>
+  </lightning-card>
+</template>
